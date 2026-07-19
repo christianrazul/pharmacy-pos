@@ -1,8 +1,10 @@
 import { Building2, LayoutDashboard, PackageSearch, ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { BranchWorkbench } from "@/components/branch-workbench";
 import { LogoutButton } from "@/components/logout-button";
 import { getCurrentUser } from "@/lib/auth";
+import { getBranches } from "@/lib/branches";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -15,10 +17,12 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  const branches = await getBranches();
+
   return (
     <main className="dashboard-shell">
       <SideRail username={user.username} />
-      <DashboardContent />
+      <DashboardContent initialBranches={branches} />
     </main>
   );
 }
@@ -32,11 +36,10 @@ function SideRail({ username }: { username: string }) {
           <LayoutDashboard aria-hidden="true" />
           Overview
         </a>
-        <span className="nav-coming" aria-disabled="true">
+        <a href="#branches">
           <Building2 aria-hidden="true" />
           Branches
-          <small>Soon</small>
-        </span>
+        </a>
         <span className="nav-coming" aria-disabled="true">
           <PackageSearch aria-hidden="true" />
           Inventory
@@ -54,7 +57,11 @@ function SideRail({ username }: { username: string }) {
   );
 }
 
-function DashboardContent() {
+function DashboardContent({
+  initialBranches,
+}: {
+  initialBranches: Awaited<ReturnType<typeof getBranches>>;
+}) {
   return (
     <section className="dashboard-main">
       <header className="mobile-header">
@@ -71,34 +78,11 @@ function DashboardContent() {
           Central admin
         </div>
       </div>
-      <BranchWorkbench />
+      <BranchWorkbench initialBranches={initialBranches} />
       <footer className="dashboard-footer">
         <span>Pharmacy POS</span>
         <span>Cloud administration · Offline branch operation planned</span>
       </footer>
-    </section>
-  );
-}
-
-function BranchWorkbench() {
-  return (
-    <section className="branch-workbench" aria-labelledby="branches-heading">
-      <div className="workbench-heading">
-        <div>
-          <h2 id="branches-heading">Branches</h2>
-          <p>The branch directory will become the entry point for operations.</p>
-        </div>
-        <span className="count-readout" aria-label="Zero branches">0</span>
-      </div>
-      <div className="empty-branches">
-        <Building2 aria-hidden="true" />
-        <div>
-          <h3>No branches configured</h3>
-          <p>
-            Branch creation is intentionally outside this milestone. The next slice will add the first real branch record here.
-          </p>
-        </div>
-      </div>
     </section>
   );
 }
