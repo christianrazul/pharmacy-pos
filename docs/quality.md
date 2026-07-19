@@ -19,7 +19,7 @@ Keep this as the project verification menu. Add commands only after they pass lo
 | Run both applications | `pnpm dev` | verified; web 3000, API 3001 |
 | Lint | `pnpm lint` | verified |
 | Typecheck | `pnpm typecheck` | verified |
-| Authentication and web behavior | `pnpm test` | verified against PostgreSQL |
+| Authentication and web behavior | `pnpm test` | verified against PostgreSQL with test-owned records |
 | Production builds | `pnpm build` | verified |
 | Observe API availability | `curl --fail http://localhost:3001/health` | verified |
 | Final repository gates | `./scripts/check-sonata.sh --ready && node scripts/check-quality-gates.mjs` | verified |
@@ -43,3 +43,4 @@ Keep this as the project verification menu. Add commands only after they pass lo
 ## Deferred Gates
 
 - SCC remains observation-only. The 2026-07-19 recommendation from `node scripts/check-quality-gates.mjs --recommend-scc` was TypeScript 2, JavaScript 21, Shell 17, and 1 for each other observed language. These early-sample ceilings are not yet policy; rerun and confirm them after another representative feature before enabling enforcement.
+- The 2026-07-20 post-branch-directory observation produced the same ceilings. Keep them observational until they are explicitly accepted as enforcement policy.

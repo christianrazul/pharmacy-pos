@@ -1,6 +1,6 @@
 # Pharmacy POS
 
-Cloud administration for a multi-branch pharmacy POS and inventory system. The current milestone provides the central-administrator login and protected dashboard; branch POS, offline operation, synchronization, and inventory workflows remain later slices.
+Cloud administration for a multi-branch pharmacy POS and inventory system. The current milestone provides central-administrator authentication plus a protected dashboard for adding and listing pharmacy branches. Branch POS, offline operation, synchronization, and inventory workflows remain later slices.
 
 ## Prerequisites
 

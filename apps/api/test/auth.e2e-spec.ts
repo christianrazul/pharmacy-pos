@@ -8,6 +8,9 @@ import { PrismaService } from '../src/database/prisma.service';
 
 let app: INestApplication;
 let prisma: PrismaService;
+let testUserId: string;
+
+const testUsername = `e2e-auth-${process.pid}`;
 
 beforeAll(async () => {
   process.env.SESSION_COOKIE_NAME = 'test_pharmacy_pos_session';
@@ -24,21 +27,19 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await prisma.session.deleteMany();
-  await prisma.user.deleteMany();
-
-  await prisma.user.create({
+  await prisma.user.deleteMany({ where: { username: testUsername } });
+  const user = await prisma.user.create({
     data: {
-      username: 'central-admin',
+      username: testUsername,
       passwordHash: String(await hash('ValidTestPassword2026!')),
       role: 'CENTRAL_ADMIN',
     },
   });
+  testUserId = user.id;
 });
 
 afterAll(async () => {
-  await prisma.session.deleteMany();
-  await prisma.user.deleteMany();
+  await prisma.user.deleteMany({ where: { username: testUsername } });
   await app.close();
 });
 
@@ -46,13 +47,15 @@ it('rejects invalid credentials without creating a session', async () => {
   const response = await request(app.getHttpServer())
     .post('/auth/login')
     .send({
-      username: 'central-admin',
+      username: testUsername,
       password: 'IncorrectPassword2026!',
     })
     .expect(401);
 
   expect(response.headers['set-cookie']).toBeUndefined();
-  await expect(prisma.session.count()).resolves.toBe(0);
+  await expect(
+    prisma.session.count({ where: { userId: testUserId } }),
+  ).resolves.toBe(0);
 });
 
 it('rejects an unauthenticated session lookup', async () => {
@@ -63,14 +66,14 @@ it('creates, resolves, and invalidates an administrator session', async () => {
   const loginResponse = await request(app.getHttpServer())
     .post('/auth/login')
     .send({
-      username: 'central-admin',
+      username: testUsername,
       password: 'ValidTestPassword2026!',
     })
     .expect(200);
   const cookie = assertLoginResponse(loginResponse);
 
   await expectCurrentUser(cookie);
-  await expectLogoutInvalidates(cookie);
+  await expectLogoutInvalidates(cookie, testUserId);
 });
 
 function assertLoginResponse(loginResponse: Response): string {
@@ -84,7 +87,7 @@ function assertLoginResponse(loginResponse: Response): string {
   };
   expect(typeof loginBody.user.id).toBe('string');
   expect(loginBody.user).toMatchObject({
-    username: 'central-admin',
+    username: testUsername,
     email: null,
     role: 'CENTRAL_ADMIN',
   });
@@ -109,10 +112,13 @@ async function expectCurrentUser(cookie: string): Promise<void> {
     user: { username: string };
   };
 
-  expect(currentUserBody.user.username).toBe('central-admin');
+  expect(currentUserBody.user.username).toBe(testUsername);
 }
 
-async function expectLogoutInvalidates(cookie: string): Promise<void> {
+async function expectLogoutInvalidates(
+  cookie: string,
+  userId: string,
+): Promise<void> {
   await request(app.getHttpServer())
     .post('/auth/logout')
     .set('Cookie', cookie)
@@ -121,5 +127,5 @@ async function expectLogoutInvalidates(cookie: string): Promise<void> {
     .get('/auth/me')
     .set('Cookie', cookie)
     .expect(401);
-  await expect(prisma.session.count()).resolves.toBe(0);
+  await expect(prisma.session.count({ where: { userId } })).resolves.toBe(0);
 }

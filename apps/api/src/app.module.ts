@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AuthModule } from './auth/auth.module';
+import { BranchesModule } from './branches/branches.module';
 import { DatabaseModule } from './database/database.module';
 import { HealthController } from './health/health.controller';
 
@@ -19,6 +20,7 @@ import { HealthController } from './health/health.controller';
     ]),
     DatabaseModule,
     AuthModule,
+    BranchesModule,
   ],
   controllers: [HealthController],
 })
