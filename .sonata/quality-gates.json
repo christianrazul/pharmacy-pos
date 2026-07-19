@@ -6,7 +6,7 @@
     "thresholds": {}
   },
   "skylos": {
-    "enabled": false,
+    "enabled": true,
     "version": "4.29.0",
     "config": ".sonata/skylos.toml"
   }

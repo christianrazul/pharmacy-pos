@@ -7,7 +7,7 @@ Keep this as the project verification menu. Add commands only after they pass lo
 | Check | Command | Run When |
 |---|---|---|
 | Harness structure and source size | `./scripts/check-sonata.sh` | After harness, docs, or skill changes |
-| Optional changed-code gates | `node scripts/check-quality-gates.mjs` | Before handoff when SCC or Skylos is enabled |
+| Skylos changed-code gate | `node scripts/check-quality-gates.mjs` | Before every code handoff |
 
 ## Project Checks
 
@@ -35,3 +35,7 @@ Keep this as the project verification menu. Add commands only after they pass lo
 - Source files above 350 lines fail the smell check. Required exceptions live in `.sonata/large-files.txt`, never product code.
 - New decisions update durable repo context.
 - Repeated failures become docs, checks, fixtures, logs, or clearer boundaries.
+
+## Deferred Gates
+
+- SCC is observation-first for the greenfield harness. After TypeScript source exists, rerun `$sonata-setup`, calculate recommendations from observed code, and confirm the ceilings before enabling enforcement.
