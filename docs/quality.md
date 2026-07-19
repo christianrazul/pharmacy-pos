@@ -13,12 +13,16 @@ Keep this as the project verification menu. Add commands only after they pass lo
 
 | Check | Command | Status |
 |---|---|---|
-| Bootstrap/install | Discover during setup | planned |
-| Run application | Discover during setup | planned |
-| Fast code checks | Discover during setup | planned |
-| Exercise primary behavior | Discover during setup | planned |
-| Observe failures | Discover during setup | planned |
-| Reset/cleanup | Discover during setup | planned |
+| Bootstrap/install | `pnpm install --frozen-lockfile` | verified |
+| Apply database migrations | `pnpm db:migrate` | verified |
+| Provision the initial administrator | `pnpm admin:create` | verified |
+| Run both applications | `pnpm dev` | verified; web 3000, API 3001 |
+| Lint | `pnpm lint` | verified |
+| Typecheck | `pnpm typecheck` | verified |
+| Authentication and web behavior | `pnpm test` | verified against PostgreSQL |
+| Production builds | `pnpm build` | verified |
+| Observe API availability | `curl --fail http://localhost:3001/health` | verified |
+| Final repository gates | `./scripts/check-sonata.sh --ready && node scripts/check-quality-gates.mjs` | verified |
 
 ## Risk Lanes
 
@@ -38,4 +42,4 @@ Keep this as the project verification menu. Add commands only after they pass lo
 
 ## Deferred Gates
 
-- SCC is observation-first for the greenfield harness. After TypeScript source exists, rerun `$sonata-setup`, calculate recommendations from observed code, and confirm the ceilings before enabling enforcement.
+- SCC remains observation-only. The 2026-07-19 recommendation from `node scripts/check-quality-gates.mjs --recommend-scc` was TypeScript 2, JavaScript 21, Shell 17, and 1 for each other observed language. These early-sample ceilings are not yet policy; rerun and confirm them after another representative feature before enabling enforcement.

@@ -3,7 +3,8 @@
 ## Coordination
 
 - Use GitHub Issues for assignable work, status, and discussion after the repository is pushed to GitHub.
-- No GitHub remote or external issue was created during Sonata setup.
+- The `origin` remote is `christianrazul/pharmacy-pos`; GitHub Issues are available for future vertical slices.
+- No external issue was required for the central-admin foundation because its durable execution plan lives in this repository.
 
 ## Source Of Truth
 

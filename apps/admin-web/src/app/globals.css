@@ -1,0 +1,156 @@
+@import "../../../../tokens.css";
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-surface: var(--color-paper-2);
+  --color-surface-strong: var(--color-paper-3);
+  --color-foreground: var(--color-ink);
+  --color-foreground-soft: var(--color-ink-2);
+  --color-muted: var(--color-muted);
+  --color-neutral: var(--color-neutral);
+  --color-border: var(--color-rule);
+  --color-border-strong: var(--color-rule-strong);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-hover);
+  --color-accent-foreground: var(--color-accent-ink);
+  --color-focus: var(--color-focus);
+  --color-error: var(--color-error);
+  --color-error-surface: var(--color-error-surface);
+  --color-success: var(--color-success);
+  --color-success-surface: var(--color-success-surface);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-block-size: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink-2);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-style: normal;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+.button,
+.input {
+  transition:
+    background-color var(--dur-short) var(--ease-out),
+    color var(--dur-short) var(--ease-out),
+    transform var(--dur-micro) var(--ease-out);
+}
+
+.button:focus-visible,
+.input:focus-visible,
+a:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.input:focus-visible {
+  border-color: var(--color-ink-2);
+  outline-offset: 1px;
+}
+
+.input:hover:not(:disabled),
+.input:active:not(:disabled) {
+  border-color: var(--color-neutral);
+}
+
+.input[aria-invalid="true"] + .field-message {
+  color: var(--color-error);
+}
+
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.brand-lockup,
+.rail-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.brand-mark {
+  display: inline-grid;
+  block-size: 2.25rem;
+  inline-size: 2.25rem;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.login-footer,
+.dashboard-footer {
+  border-block-start: var(--rule-thin) solid var(--color-rule);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+  padding-block-start: var(--space-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 150ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 150ms !important;
+  }
+}

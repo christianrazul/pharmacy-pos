@@ -142,22 +142,33 @@ export async function recommendScc(root) {
 }
 
 export async function runSkylos(cwd, files, configPath) {
-  if (!files.length) return {};
+  const supportedExtensions = new Set([
+    '.c', '.cs', '.dart', '.go', '.java', '.js', '.jsx', '.kt', '.kts',
+    '.mjs', '.cjs', '.php', '.py', '.rs', '.ts', '.tsx'
+  ]);
+  const sourceFiles = files.filter((file) => supportedExtensions.has(path.extname(file)));
+  if (!sourceFiles.length) return {};
   const args = [
     '--config-file', configPath,
     '--danger', '--secrets', '--quality',
     '--format', 'json', '--no-provenance',
-    ...files
+    ...sourceFiles
   ];
   const { stdout } = await run('skylos', args, { cwd });
   return parseJson(stdout, 'Skylos');
 }
 
 export function newSkylosFindings(current, baseline, currentRoot, baseRoot, allowedPaths) {
-  const allowed = new Set(allowedPaths.map(normalizePath));
+  const allowed = new Set(
+    allowedPaths.map(normalizePath).filter((file) => !isDependencyLock(file))
+  );
   const before = collectFindings(baseline, baseRoot, allowed);
   const fingerprints = new Set(before.map(fingerprint));
   return collectFindings(current, currentRoot, allowed).filter((finding) => !fingerprints.has(fingerprint(finding)));
+}
+
+function isDependencyLock(file) {
+  return /(^|\/)(bun\.lockb?|package-lock\.json|pnpm-lock\.yaml|yarn\.lock)$/.test(file);
 }
 
 export async function runNativeSkylosGate(findings) {

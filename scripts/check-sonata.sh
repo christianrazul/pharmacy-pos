@@ -50,7 +50,7 @@ grep -q '"schema": 2' .sonata/manifest.json || {
   exit 1
 }
 
-./scripts/check-file-size.sh
+bash ./scripts/check-file-size.sh
 node scripts/check-quality-gates.mjs
 
 if [[ "${1:-}" == "--ready" ]]; then

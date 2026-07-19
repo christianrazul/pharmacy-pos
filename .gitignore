@@ -5,7 +5,10 @@
 node_modules/
 dist/
 build/
+.next/
+.turbo/
 coverage/
+*.tsbuildinfo
 .sonata/bin/
 .skylos/
 .pi/sessions/

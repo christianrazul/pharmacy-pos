@@ -1,0 +1,8 @@
+{
+  "date": "2026-07-19",
+  "fontStack": "Space Grotesk / Inter / JetBrains Mono",
+  "palette": "Cobalt",
+  "motion": "motion-cut",
+  "spacing": "4px-based named scale",
+  "framework": "Next.js with shadcn-style primitives"
+}

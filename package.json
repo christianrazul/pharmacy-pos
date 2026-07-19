@@ -1,0 +1,22 @@
+{
+  "name": "pharmacy-pos",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.34.2",
+  "engines": {
+    "node": ">=24 <25",
+    "pnpm": ">=10 <11"
+  },
+  "scripts": {
+    "build": "pnpm --recursive --if-present build",
+    "dev": "pnpm --recursive --parallel --filter './apps/*' dev",
+    "lint": "pnpm --recursive --if-present lint",
+    "test": "pnpm --recursive --if-present test",
+    "typecheck": "pnpm --recursive --if-present typecheck",
+    "db:up": "docker compose up -d postgres",
+    "db:down": "docker compose down",
+    "db:reset": "pnpm --filter @pharmacy/api db:reset",
+    "db:migrate": "pnpm --filter @pharmacy/api db:migrate",
+    "admin:create": "pnpm --filter @pharmacy/api admin:create"
+  }
+}

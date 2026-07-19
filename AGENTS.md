@@ -11,6 +11,7 @@ Agents read this first. Keep it short; link to durable detail.
 - Treat 250–350 lines as a healthy range, not a target. Above 350 is a smell; split at real boundaries.
 - Use the narrowest credible validation lane from [docs/quality.md](docs/quality.md).
 - When the same failure recurs, improve the harness with a doc, check, fixture, log, or clearer boundary.
+- Stage and commit completed big or breaking changes with a Chris Beams-style commit message after validation.
 
 ## Knowledge Map
 

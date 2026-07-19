@@ -13,7 +13,7 @@ is_allowed_large_file() {
 
 while IFS= read -r -d '' file; do
   case "$file" in
-    */.git/*|*/node_modules/*|*/vendor/*|*/dist/*|*/build/*|*/coverage/*|*/migrations/*|*/.tmp-sonata-*/*|*.generated.*|*.g.cs) continue ;;
+    */.git/*|*/.next/*|*/node_modules/*|*/vendor/*|*/dist/*|*/build/*|*/coverage/*|*/generated/*|*/migrations/*|*/.tmp-sonata-*/*|*.generated.*|*.g.cs) continue ;;
   esac
   if is_allowed_large_file "$file"; then continue; fi
   lines="$(wc -l < "$file" | tr -d ' ')"
@@ -21,16 +21,22 @@ while IFS= read -r -d '' file; do
     printf 'source file exceeds 350 lines: %s (%s)\n' "$file" "$lines"
     failed=1
   fi
-done < <(find . -type f \( \
-  -name '*.js' -o -name '*.jsx' -o -name '*.ts' -o -name '*.tsx' -o \
-  -name '*.py' -o -name '*.cs' -o -name '*.rs' -o -name '*.go' -o \
-  -name '*.java' -o -name '*.kt' -o -name '*.kts' -o -name '*.sh' -o \
-  -name '*.bash' -o -name '*.zsh' -o -name '*.c' -o -name '*.h' -o \
-  -name '*.cc' -o -name '*.cpp' -o -name '*.hpp' -o -name '*.rb' -o \
-  -name '*.php' -o -name '*.swift' -o -name '*.m' -o -name '*.mm' -o \
-  -name '*.vue' -o -name '*.svelte' -o -name '*.scala' -o -name '*.ex' -o \
-  -name '*.exs' -o -name '*.erl' -o -name '*.fs' -o -name '*.fsx' \
-\) -print0)
+done < <(find . \
+  \( -type d \( \
+    -name .git -o -name .next -o -name node_modules -o -name vendor -o \
+    -name dist -o -name build -o -name coverage -o -name generated -o \
+    -name migrations -o -name .skylos -o -path './.sonata/bin' -o -name '.tmp-sonata-*' \
+  \) -prune \) -o \
+  \( -type f \( \
+    -name '*.js' -o -name '*.jsx' -o -name '*.ts' -o -name '*.tsx' -o \
+    -name '*.py' -o -name '*.cs' -o -name '*.rs' -o -name '*.go' -o \
+    -name '*.java' -o -name '*.kt' -o -name '*.kts' -o -name '*.sh' -o \
+    -name '*.bash' -o -name '*.zsh' -o -name '*.c' -o -name '*.h' -o \
+    -name '*.cc' -o -name '*.cpp' -o -name '*.hpp' -o -name '*.rb' -o \
+    -name '*.php' -o -name '*.swift' -o -name '*.m' -o -name '*.mm' -o \
+    -name '*.vue' -o -name '*.svelte' -o -name '*.scala' -o -name '*.ex' -o \
+    -name '*.exs' -o -name '*.erl' -o -name '*.fs' -o -name '*.fsx' \
+  \) -print0 \))
 
 if (( failed )); then
   printf 'split by feature, responsibility, or interface boundary; do not slice arbitrarily\n'
